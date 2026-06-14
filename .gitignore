@@ -1,0 +1,15 @@
+# Root node_modules (if any root-level packages get installed)
+node_modules
+
+# Environment files
+.env
+.env.*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/*
+!.vscode/extensions.json
+.idea

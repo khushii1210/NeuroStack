@@ -1,0 +1,105 @@
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  notes     Note[]
+  snippets  Snippet[]
+  bugs      Bug[]
+  nodes     Node[]
+  edges     Edge[]
+  chatMessages ChatMessage[]
+}
+
+model Node {
+  id         Int      @id @default(autoincrement())
+  label      String
+  category   String
+  x          Float    @default(0)
+  y          Float    @default(0)
+  createdAt  DateTime @default(now())
+  userId     Int
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  edgesFrom  Edge[]   @relation("EdgeFrom")
+  edgesTo    Edge[]   @relation("EdgeTo")
+}
+
+model Edge {
+  id         Int  @id @default(autoincrement())
+  fromNodeId Int
+  toNodeId   Int
+  fromNode   Node @relation("EdgeFrom", fields: [fromNodeId], references: [id], onDelete: Cascade)
+  toNode     Node @relation("EdgeTo", fields: [toNodeId], references: [id], onDelete: Cascade)
+  userId     Int
+  user       User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+model Note {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  tags      String[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Snippet {
+  id          Int     @id @default(autoincrement())
+  title       String
+  code        String
+  language    String
+  description String
+  tags        String[]
+  createdAt   DateTime @default(now())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Bug {
+  id          Int     @id @default(autoincrement())
+  title       String
+  description String
+  tags        String[]
+  solution    String  @default("")
+  severity    Severity
+  status      Status
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Severity {
+  low 
+  medium
+  high
+  critical
+}
+
+enum Status {
+  open 
+  in_progress
+  resolved
+}
+
+model ChatMessage {
+  id        Int      @id @default(autoincrement())
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+  generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["driverAdapters"]
+}
