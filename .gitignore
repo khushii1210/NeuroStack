@@ -10,6 +10,5 @@ node_modules
 Thumbs.db
 
 # Editor
-.vscode/*
-!.vscode/extensions.json
+.vscode/
 .idea

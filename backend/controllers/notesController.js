@@ -35,7 +35,7 @@ const createNote = async (req, res) => {
 
 //PUT update a note
 const updateNote = async (req, res) => {
-    const { title, content, tags } = req.body;
+    const { title, content, tags, nodeId } = req.body;
     if (!title) return res.status(400).json({ message: "Title is required" });
 
     try {
@@ -51,7 +51,8 @@ const updateNote = async (req, res) => {
             data: {
                 title,
                 content,
-                tags
+                tags,
+                nodeId: nodeId !== undefined ? nodeId : existing.nodeId,
             },
         });
         res.status(200).json(note);

@@ -1,6 +1,7 @@
 import axios from './axios';
 
 export const getGraph = () => axios.get('/graph');
+export const getNodeDetail = (id) => axios.get(`/graph/nodes/${id}`);
 export const createNode = (data) => axios.post('/graph/nodes', data);
 export const createEdge = (data) => axios.post('/graph/edges', data);
 export const updateNode = (id, data) => axios.put(`/graph/nodes/${id}`, data);

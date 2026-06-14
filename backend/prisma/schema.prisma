@@ -17,16 +17,20 @@ model User {
 }
 
 model Node {
-  id         Int      @id @default(autoincrement())
-  label      String
-  category   String
-  x          Float    @default(0)
-  y          Float    @default(0)
-  createdAt  DateTime @default(now())
-  userId     Int
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  edgesFrom  Edge[]   @relation("EdgeFrom")
-  edgesTo    Edge[]   @relation("EdgeTo")
+  id          Int      @id @default(autoincrement())
+  label       String
+  category    String
+  description String?
+  x           Float    @default(0)
+  y           Float    @default(0)
+  createdAt   DateTime @default(now())
+  userId      Int
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  edgesFrom   Edge[]   @relation("EdgeFrom")
+  edgesTo     Edge[]   @relation("EdgeTo")
+  notes       Note[]
+  snippets    Snippet[]
+  bugs        Bug[]
 }
 
 model Edge {
@@ -48,7 +52,9 @@ model Note {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   userId    Int
+  nodeId    Int?
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node      Node?    @relation(fields: [nodeId], references: [id], onDelete: Cascade)
 }
 
 model Snippet {
@@ -60,7 +66,9 @@ model Snippet {
   tags        String[]
   createdAt   DateTime @default(now())
   userId      Int
+  nodeId      Int?
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node        Node?    @relation(fields: [nodeId], references: [id], onDelete: SetNull)
 }
 
 model Bug {
@@ -74,7 +82,9 @@ model Bug {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   userId      Int
+  nodeId      Int?
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  node        Node?    @relation(fields: [nodeId], references: [id], onDelete: SetNull)
 }
 
 enum Severity {

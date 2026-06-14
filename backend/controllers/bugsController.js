@@ -42,7 +42,7 @@ const createBug = async (req, res) => {
 
 //PUT update a bug
 const updateBug = async (req, res) => {
-    const { title, description, severity, status, solution, tags } = req.body;
+    const { title, description, severity, status, solution, tags, nodeId } = req.body;
 
     try {
         const existing = await prisma.bug.findUnique({
@@ -54,7 +54,10 @@ const updateBug = async (req, res) => {
 
         const bug = await prisma.bug.update({
             where: { id: parseInt(req.params.id) },
-            data: { title, description, severity, status, solution, tags }
+            data: {
+                title, description, severity, status, solution, tags,
+                nodeId: nodeId !== undefined ? nodeId : existing.nodeId,
+            }
         });
         res.status(200).json(bug);
     } catch (err) {

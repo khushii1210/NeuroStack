@@ -7,6 +7,7 @@ import '@xyflow/react/dist/style.css';
 import { Plus, Trash2, X, Save, Sparkles } from 'lucide-react';
 import { getGraph, createNode, createEdge, deleteNode, deleteEdge, updateNodePosition } from '../api/graph';
 import { generateGraph } from '../api/ai';
+import NodeDetailPanel from '../components/NodeDetailPanel';
 
 const CATEGORIES = ['concept', 'language', 'framework', 'tool', 'database', 'other'];
 
@@ -31,6 +32,7 @@ const S = {
 function KnowledgeGraphPage() {
   const [search, setSearch] = useState('');
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [selectedNodeId, setSelectedNodeId] = useState(null);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [rawNodes, setRawNodes] = useState([]);
   const [rawEdges, setRawEdges] = useState([]);
@@ -38,7 +40,7 @@ function KnowledgeGraphPage() {
   const [error, setError] = useState('');
   const [creating, setCreating] = useState(false);
   const [generating, setGenerating] = useState(false);
-  const [form, setForm] = useState({ label: '', category: 'concept' });
+  const [form, setForm] = useState({ label: '', category: 'concept', description: '' });
 
   const buildFlowNodes = (dbNodes) => dbNodes.map((n, i) => ({
     id: String(n.id),
@@ -115,12 +117,13 @@ function KnowledgeGraphPage() {
       await createNode({
         label,
         category: form.category,
+        description: form.description,
       });
 
       await fetchGraph();
 
       setCreating(false);
-      setForm({ label: '', category: 'concept' });
+      setForm({ label: '', category: 'concept', description: '' });
     } catch {
       setError('Failed to create node');
     }
@@ -152,7 +155,10 @@ function KnowledgeGraphPage() {
     if (!confirm('This will analyze your notes and snippets to create a knowledge graph. Continue?')) return;
     setGenerating(true);
     try {
-      const res = await generateGraph();
+      // get the real max Y from current canvas nodes
+      const canvasMaxY = nodes.length > 0 ? Math.max(...nodes.map(n => n.position.y)) : 0;
+
+    const res = await generateGraph(canvasMaxY);
       setRawNodes(prev => [...prev, ...res.data.nodes]);
       setRawEdges(prev => [...prev, ...res.data.edges]);
       await fetchGraph(); // refresh to show new nodes
@@ -198,6 +204,10 @@ function KnowledgeGraphPage() {
       setError('Failed to delete connection');
     }
   };
+
+  const onNodeClick = useCallback((_event, node) => {
+    setSelectedNodeId(parseInt(node.id));
+  }, []);  
 
   return (
     <div style={{ padding: '40px 48px 48px', height: '100%', display: 'flex', flexDirection: 'column', gap: 16, boxSizing: 'border-box' }}>
@@ -341,6 +351,24 @@ function KnowledgeGraphPage() {
           >
             {CATEGORIES.map(c => <option key={c} value={c}>{c}</option>)}
           </select>
+          <input
+            value={form.description}
+            onChange={e => setForm({ ...form, description: e.target.value })}
+            placeholder="Description (optional)..."
+            style={{
+              flex: 1,
+              minWidth: 200,
+              background: 'transparent',
+              border: 'none',
+              borderBottom: `1px solid ${S.border}`,
+              color: S.text,
+              fontSize: 14,
+              outline: 'none',
+              padding: '0 0 10px',
+              fontFamily: 'inherit',
+            }}
+          />
+
           <button
             type="button"
             onClick={handleCreateNode}
@@ -448,6 +476,7 @@ function KnowledgeGraphPage() {
             overflow: 'hidden',
             background: '#050816',
             border: `1px solid ${S.border}`,
+            position: 'relative',   // add this
           }}
         >
           <ReactFlow
@@ -457,27 +486,24 @@ function KnowledgeGraphPage() {
             onEdgesChange={onEdgesChange}
             onConnect={onConnect}
             onNodeDragStop={onNodeDragStop}
+            onNodeClick={onNodeClick}
             onEdgeClick={(event, edge) => {
-                event.stopPropagation();
-              
-                if (window.confirm('Delete connection?')) {
-                  handleDeleteEdge(edge.id);
-                }
-              }}
+              event.stopPropagation();
+              if (window.confirm('Delete connection?')) {
+                handleDeleteEdge(edge.id);
+              }
+            }}
           >
-            <Background
-              color="rgba(255,255,255,0.06)"
-              gap={28}
-              size={1}
-            />
-            <Controls
-              style={{
-                background: '#0b1326',
-                border: '1px solid #1E293B',
-                borderRadius: 10,
-              }}
-            />
+            <Background color="rgba(255,255,255,0.06)" gap={28} size={1} />
+            <Controls style={{ background: '#0b1326', border: '1px solid #1E293B', borderRadius: 10 }} />
           </ReactFlow>
+
+          {/* Node detail side panel */}
+          <NodeDetailPanel
+            nodeId={selectedNodeId}
+            onClose={() => setSelectedNodeId(null)}
+            onNodeUpdated={fetchGraph}
+          />
         </div>
       )}
     </div>

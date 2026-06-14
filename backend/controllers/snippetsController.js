@@ -31,7 +31,7 @@ const createSnippet = async (req, res) => {
 
 //PUT update a snippet
 const updateSnippet = async (req, res) => {
-    const { title, code, language, description, tags } = req.body;  
+    const { title, code, language, description, tags, nodeId } = req.body;
     if (!title) return res.status(400).json({ message: "Title is required" });
 
     try {
@@ -44,7 +44,10 @@ const updateSnippet = async (req, res) => {
 
         const snippet = await prisma.snippet.update({
             where: { id: parseInt(req.params.id) },
-            data: { title, code, language, description, tags }
+            data: {
+                title, code, language, description, tags,
+                nodeId: nodeId !== undefined ? nodeId : existing.nodeId,
+            }
         });
         res.status(200).json(snippet);
     } catch (error) {

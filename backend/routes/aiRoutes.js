@@ -4,7 +4,7 @@ const { chat, generateGraph, getHistory, clearHistory } = require('../controller
 const { protect } = require('../middleware/authMiddleware');
 
 router.post('/chat', protect, chat);
-router.get('/generate-graph', protect, generateGraph);
+router.post('/generate-graph', protect, generateGraph);
 router.get('/history', protect, getHistory);
 router.delete('/history', protect, clearHistory);
 
