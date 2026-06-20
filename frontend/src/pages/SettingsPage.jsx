@@ -5,18 +5,18 @@ import axios from '../api/axios';
 import { useNavigate } from 'react-router-dom';
 
 const S = {
-  surface: '#0b1326',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
+  surface:       'rgba(255,255,255,0.06)',
+  border:        'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  muted:         '#d4b8b8',
+  dim:           '#7a5a5a',
 };
 
 const inputStyle = {
   width: '100%',
   padding: '12px 16px',
   borderRadius: 10,
-  background: '#020617',
+  background: 'rgba(0,0,0,0.3)',
   border: `1px solid ${S.border}`,
   color: S.text,
   fontSize: 14,
@@ -129,7 +129,7 @@ function SettingsPage() {
         }}>
           Account
         </p>
-        <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-400 to-slate-200 bg-clip-text text-transparent" style={{ margin: 0 }}>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
           Settings
         </h1>
         <p style={{ color: S.muted, fontSize: 15, margin: '10px 0 0' }}>
@@ -142,7 +142,7 @@ function SettingsPage() {
         {/* Profile */}
         <SectionCard>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <User size={18} style={{ color: '#22d3ee' }} />
+            <User size={18} style={{ color: '#f87171' }} />
             <h3 style={{ color: S.text, fontSize: 15, fontWeight: 600, margin: 0 }}>Profile</h3>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -174,7 +174,7 @@ function SettingsPage() {
               padding: '10px 18px',
               borderRadius: 10,
               border: 'none',
-              background: 'linear-gradient(to right, #06b6d4, #2563eb)',
+              background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
               color: '#fff',
               fontSize: 13,
               fontFamily: 'monospace',
@@ -192,7 +192,7 @@ function SettingsPage() {
         <SectionCard>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <Lock size={18} style={{ color: '#c084fc' }} />
+              <Lock size={18} style={{ color: '#fb923c' }} />
               <h3 style={{ color: S.text, fontSize: 15, fontWeight: 600, margin: 0 }}>Change Password</h3>
             </div>
             <button
@@ -233,7 +233,7 @@ function SettingsPage() {
               padding: '10px 18px',
               borderRadius: 10,
               border: 'none',
-              background: 'linear-gradient(to right, #a855f7, #db2777)',
+              background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
               color: '#fff',
               fontSize: 13,
               fontFamily: 'monospace',

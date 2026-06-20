@@ -5,14 +5,14 @@ import LayoutToggle from '../components/LayoutToggle';
 import { useLayoutView, getLayoutContainerStyle, getLayoutVisibility } from '../hooks/useLayoutView';
 
 const S = {
-  surface: '#0b1326',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
-  accent: '#adc6ff',
-  coral: '#ffb4ab',
-  orange: '#fb923c',
+  surface:       'rgba(255,255,255,0.06)',
+  border:        'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  muted:         '#d4b8b8',
+  dim:           '#7a5a5a',
+  accent:        '#f87171',
+  coral:         '#f87171',
+  orange:        '#fb923c',
 };
 
 const SEV_STYLES = {
@@ -29,10 +29,10 @@ const STATUS_STYLES = {
 };
 
 const TAG_STYLES = [
-  { bg: 'rgba(255,180,171,0.12)', border: 'rgba(255,180,171,0.25)', color: '#ffb4ab' },
-  { bg: 'rgba(173,198,255,0.12)', border: 'rgba(173,198,255,0.25)', color: '#adc6ff' },
-  { bg: 'rgba(221,183,255,0.12)', border: 'rgba(221,183,255,0.25)', color: '#ddb7ff' },
-  { bg: 'rgba(60,221,199,0.12)', border: 'rgba(60,221,199,0.25)', color: '#3cddc7' },
+  { bg: 'rgba(239,68,68,0.12)',  border: 'rgba(239,68,68,0.25)',  color: '#f87171' },
+  { bg: 'rgba(251,146,60,0.12)', border: 'rgba(251,146,60,0.25)', color: '#fb923c' },
+  { bg: 'rgba(250,204,21,0.12)', border: 'rgba(250,204,21,0.25)', color: '#fbbf24' },
+  { bg: 'rgba(255,255,255,0.08)',border: 'rgba(255,255,255,0.15)',color: '#d4b8b8' },
 ];
 
 const STATUS_ORDER = ['open', 'in_progress', 'resolved'];
@@ -40,9 +40,9 @@ const STATUS_ORDER = ['open', 'in_progress', 'resolved'];
 const selectStyle = {
   padding: '10px 14px',
   borderRadius: 10,
-  background: '#020617',
-  border: '1px solid #1E293B',
-  color: '#dae2fd',
+  background: 'rgba(0,0,0,0.3)',
+  border: '1px solid rgba(255,255,255,0.10)',
+  color: '#fff5f5',
   fontSize: 13,
   outline: 'none',
   fontFamily: 'inherit',
@@ -82,7 +82,7 @@ function BugJournalPage() {
   useEffect(() => {
     if (selectedBug) {
       window.history.pushState({ detail: true }, '');
-      const handler = () => setSelectedBug(null);
+      const handler = () => setTimeout(() => setSelectedBug(null), 0);
       window.addEventListener('popstate', handler);
       return () => window.removeEventListener('popstate', handler);
     }
@@ -196,7 +196,7 @@ function BugJournalPage() {
             </p>
           </div>
           {bug.solution && (
-            <div style={{ background: '#020617', border: `1px solid ${S.border}`, borderRadius: 16, padding: '20px 24px' }}>
+            <div style={{ background: 'rgba(0,0,0,0.3)', border: `1px solid ${S.border}`, borderRadius: 16, padding: '20px 24px' }}>
               <p style={{ color: S.dim, fontSize: 10, fontFamily: 'monospace', letterSpacing: '0.08em', margin: '0 0 12px' }}>SOLUTION</p>
               <pre style={{ color: '#4ade80', fontSize: 13, fontFamily: 'monospace', margin: 0, whiteSpace: 'pre-wrap', lineHeight: 1.7 }}>
                 {bug.solution}
@@ -256,8 +256,8 @@ function BugJournalPage() {
             padding: '12px 20px',
             borderRadius: 10,
             border: 'none',
-            background: '#adc6ff',
-            color: '#002e6a',
+            background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+            color: '#fff',
             fontWeight: 700,
             fontSize: 13,
             fontFamily: 'monospace',
@@ -307,9 +307,9 @@ function BugJournalPage() {
                   fontSize: 12,
                   fontFamily: 'monospace',
                   cursor: 'pointer',
-                  border: active ? '1px solid rgba(255,180,171,0.35)' : `1px solid ${S.border}`,
-                  background: active ? 'rgba(255,180,171,0.12)' : 'transparent',
-                  color: active ? S.coral : S.dim,
+                  border: active ? '1px solid rgba(239,68,68,0.25)' : `1px solid ${S.border}`,
+                  background: active ? 'rgba(239,68,68,0.12)' : 'transparent',
+                  color: active ? S.crimsonLight : S.dim,
                 }}
               >
                 {label}
@@ -324,7 +324,7 @@ function BugJournalPage() {
       {creating && (
         <div style={{
           background: S.surface,
-          border: '1px solid rgba(255,180,171,0.25)',
+          border: '1px solid rgba(239,68,68,0.25)',
           borderRadius: 16,
           padding: '28px 30px',
           marginBottom: 28,
@@ -373,7 +373,7 @@ function BugJournalPage() {
             rows={4}
             style={{
               width: '100%',
-              background: '#020617',
+              background: 'rgba(0,0,0,0.3)',
               border: `1px solid ${S.border}`,
               borderRadius: 10,
               color: '#4ade80',
@@ -436,9 +436,9 @@ function BugJournalPage() {
                 gap: 8,
                 padding: '10px 18px',
                 borderRadius: 10,
-                border: '1px solid rgba(255,180,171,0.35)',
-                background: 'rgba(255,180,171,0.12)',
-                color: S.coral,
+                border: '1px solid rgba(239,68,68,0.35)',
+                background: 'rgba(239,68,68,0.12)',
+                color: S.crimsonLight,
                 fontSize: 13,
                 fontFamily: 'monospace',
                 cursor: 'pointer',
@@ -507,7 +507,7 @@ function BugJournalPage() {
                   transition: 'border-color 0.15s',
                   cursor: 'pointer',
                 }}
-                onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(255,180,171,0.2)'; }}
+                onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.2)'; }}
                 onMouseOut={(e) => { e.currentTarget.style.borderColor = S.border; }}
                 onClick={() => setSelectedBug(bug.id)}
               >
@@ -544,7 +544,7 @@ function BugJournalPage() {
                       <button
                         type="button"
                         onClick={(e) => { e.stopPropagation(); cycleStatus(bug); }}
-                        style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontFamily: 'monospace', padding: '6px 12px', borderRadius: 8, border: `1px solid ${S.border}`, background: '#020617', color: stat.color, cursor: 'pointer' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, fontFamily: 'monospace', padding: '6px 12px', borderRadius: 8, border: `1px solid ${S.border}`, background: 'rgba(0,0,0,0.3)', color: stat.color, cursor: 'pointer' }}
                       >
                         <StatIcon size={13} /> {stat.label}
                       </button>

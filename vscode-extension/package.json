@@ -1,0 +1,53 @@
+{
+    "name": "neurostack",
+    "displayName": "NeuroStack",
+    "description": "Save snippets, notes, and bugs directly to NeuroStack from VS Code",
+    "version": "0.0.1",
+    "engines": { "vscode": "^1.85.0" },
+    "categories": ["Other"],
+    "activationEvents": [],
+    "main": "./src/extension.js",
+    "contributes": {
+      "commands": [
+        {
+          "command": "neurostack.login",
+          "title": "NeuroStack: Login"
+        },
+        {
+          "command": "neurostack.saveSnippet",
+          "title": "NeuroStack: Save as Snippet"
+        },
+        {
+          "command": "neurostack.saveNote",
+          "title": "NeuroStack: Save as Note"
+        },
+        {
+          "command": "neurostack.saveBug",
+          "title": "NeuroStack: Save as Bug"
+        }
+      ],
+      "menus": {
+        "editor/context": [
+          {
+            "command": "neurostack.saveSnippet",
+            "when": "editorHasSelection",
+            "group": "neurostack@1"
+          },
+          {
+            "command": "neurostack.saveNote",
+            "when": "editorHasSelection",
+            "group": "neurostack@2"
+          },
+          {
+            "command": "neurostack.saveBug",
+            "when": "editorHasSelection",
+            "group": "neurostack@3"
+          }
+        ]
+      }
+    },
+    "dependencies": {
+      "axios": "^1.7.0"
+    }
+  }
+  

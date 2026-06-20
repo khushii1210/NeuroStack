@@ -15,11 +15,11 @@ const CATEGORY_COLORS = {
 };
 
 const S = {
-  surface: '#0b1326',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
+  surface:       'rgba(255,255,255,0.06)',
+  border:        'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  muted:         '#d4b8b8',
+  dim:           '#7a5a5a',
 };
 
 export default function NodeDetailPanel({ nodeId, onClose, onNodeUpdated }) {
@@ -111,7 +111,9 @@ export default function NodeDetailPanel({ nodeId, onClose, onNodeUpdated }) {
       right: 0,
       width: 360,
       height: '100%',
-      background: S.surface,
+      background: 'rgba(7,4,8,0.95)',
+      backdropFilter: 'blur(20px)',
+      WebkitBackdropFilter: 'blur(20px)',
       borderLeft: `1px solid ${S.border}`,
       display: 'flex',
       flexDirection: 'column',
@@ -165,7 +167,7 @@ export default function NodeDetailPanel({ nodeId, onClose, onNodeUpdated }) {
                   autoFocus
                   rows={4}
                   style={{
-                    width: '100%', background: '#020617', border: `1px solid ${S.border}`,
+                    width: '100%', background: 'rgba(0,0,0,0.3)', border: `1px solid ${S.border}`,
                     borderRadius: 8, color: S.text, fontSize: 14, padding: '10px 12px',
                     outline: 'none', resize: 'vertical', fontFamily: 'inherit', boxSizing: 'border-box',
                   }}
@@ -266,11 +268,11 @@ function LinkSection({ icon, label, color, linked, unlinked, editing, onToggleEd
               {/* linked items — slightly brighter background */}
               <div style={{
                 padding: '8px 12px', borderRadius: 8,
-                background: '#0d1f3c',
+                background: 'rgba(239,68,68,0.06)',
                 border: `1px solid ${color}40`,
                 display: 'flex', flexDirection: 'column', gap: 3,
               }}>
-                <span style={{ fontSize: 13, color: '#dae2fd', fontWeight: 500 }}>{item.title}</span>
+                <span style={{ fontSize: 13, color: '#fff5f5', fontWeight: 500 }}>{item.title}</span>
                 <span style={{ fontSize: 11, color, fontFamily: 'monospace' }}>{renderMeta(item)}</span>
               </div>
             </div>
@@ -283,20 +285,20 @@ function LinkSection({ icon, label, color, linked, unlinked, editing, onToggleEd
         ))}
 
         {editing && unlinked.length > 0 && (
-          <div style={{ marginTop: 6, borderTop: '1px solid #1E293B', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
-            <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>Add link</span>
+          <div style={{ marginTop: 6, borderTop: `1px solid ${S.border}`, paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 6 }}>
+            <span style={{ fontSize: 11, color: '#7a5a5a', fontFamily: 'monospace' }}>Add link</span>
             {unlinked.map(item => (
               <div key={item.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
                 <div style={{ flex: 1 }}>
                   {/* unlinked items — darker, dimmer */}
                   <div style={{
                     padding: '8px 12px', borderRadius: 8,
-                    background: '#020617',
-                    border: '1px solid #1E293B',
+                    background: 'rgba(0,0,0,0.2)',
+                    border: `1px solid ${S.border}`,
                     display: 'flex', flexDirection: 'column', gap: 3,
                     opacity: 0.65,
                   }}>
-                    <span style={{ fontSize: 13, color: '#dae2fd', fontWeight: 500 }}>{item.title}</span>
+                    <span style={{ fontSize: 13, color: '#fff5f5', fontWeight: 500 }}>{item.title}</span>
                     <span style={{ fontSize: 11, color: '#475569', fontFamily: 'monospace' }}>{renderMeta(item)}</span>
                   </div>
                 </div>
@@ -353,10 +355,10 @@ function ActionBtn({ color, onClick, children }) {
 function Item({ title, meta, color }) {
   return (
     <div style={{
-      padding: '8px 12px', borderRadius: 8, background: '#020617',
-      border: '1px solid #1E293B', display: 'flex', flexDirection: 'column', gap: 3,
+      padding: '8px 12px', borderRadius: 8, background: 'rgba(255,255,255,0.02)',
+      border: `1px solid ${S.border}`, display: 'flex', flexDirection: 'column', gap: 3,
     }}>
-      <span style={{ fontSize: 13, color: '#dae2fd', fontWeight: 500 }}>{title}</span>
+      <span style={{ fontSize: 13, color: '#fff5f5', fontWeight: 500 }}>{title}</span>
       <span style={{ fontSize: 11, color: color || '#475569', fontFamily: 'monospace' }}>{meta}</span>
     </div>
   );

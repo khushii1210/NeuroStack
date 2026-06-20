@@ -21,12 +21,12 @@ const CATEGORY_COLORS = {
 };
 
 const S = {
-  surface: '#0b1326',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
-  accent: '#adc6ff',
+  surface:       'rgba(255,255,255,0.06)',
+  border:        'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  muted:         '#d4b8b8',
+  dim:           '#7a5a5a',
+  accent:        '#f87171',
 };
 
 function KnowledgeGraphPage() {
@@ -50,10 +50,10 @@ function KnowledgeGraphPage() {
       ? { x: n.x, y: n.y }
       : { x: 100 + (i % 4) * 200, y: 100 + Math.floor(i / 4) * 150 },
     style: {
-      background: '#0b1326',
+      background: '#110202',
       border: `1.5px solid ${CATEGORY_COLORS[n.category]}`,
       borderRadius: 14,
-      color: '#dae2fd',
+      color: '#fff5f5',
       padding: '10px 18px',
       fontSize: 13,
       boxShadow: `0 0 0 1px ${CATEGORY_COLORS[n.category]}20`,
@@ -232,7 +232,7 @@ function KnowledgeGraphPage() {
           }}>
             Tools
           </p>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-yellow-400 to-orange-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
             Knowledge Graph
           </h1>
           <p style={{ color: S.muted, fontSize: 15, margin: '10px 0 0' }}>
@@ -251,7 +251,7 @@ function KnowledgeGraphPage() {
               padding: '12px 20px',
               borderRadius: 10,
               border: 'none',
-              background: 'linear-gradient(to right, #10b981, #0891b2)',
+              background: 'linear-gradient(135deg, #dc2626, #fb923c)',
               color: '#fff',
               fontWeight: 700,
               fontSize: 13,
@@ -274,8 +274,8 @@ function KnowledgeGraphPage() {
               padding: '12px 20px',
               borderRadius: 10,
               border: 'none',
-              background: '#adc6ff',
-              color: '#002e6a',
+              background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+              color: '#fff',
               fontWeight: 700,
               fontSize: 13,
               fontFamily: 'monospace',
@@ -308,7 +308,7 @@ function KnowledgeGraphPage() {
       {creating && (
         <div style={{
           background: S.surface,
-          border: '1px solid rgba(250,204,21,0.25)',
+          border: '1px solid rgba(239,68,68,0.25)',
           borderRadius: 16,
           padding: '20px 24px',
           display: 'flex',
@@ -341,7 +341,7 @@ function KnowledgeGraphPage() {
             style={{
               padding: '10px 14px',
               borderRadius: 10,
-              background: '#020617',
+              background: 'rgba(0,0,0,0.3)',
               border: `1px solid ${S.border}`,
               color: S.text,
               fontSize: 13,
@@ -378,9 +378,9 @@ function KnowledgeGraphPage() {
               gap: 8,
               padding: '10px 18px',
               borderRadius: 10,
-              border: '1px solid rgba(250,204,21,0.35)',
-              background: 'rgba(250,204,21,0.12)',
-              color: '#facc15',
+              border: '1px solid rgba(239,68,68,0.35)',
+              background: 'rgba(239,68,68,0.12)',
+              color: '#f87171',
               fontSize: 13,
               fontFamily: 'monospace',
               cursor: 'pointer',
@@ -418,7 +418,7 @@ function KnowledgeGraphPage() {
           width: '100%',
           padding: '14px 18px',
           borderRadius: 10,
-          background: '#020617',
+          background: 'rgba(0,0,0,0.3)',
           border: `1px solid ${S.border}`,
           color: S.text,
           fontSize: 14,
@@ -474,7 +474,7 @@ function KnowledgeGraphPage() {
             minHeight: 384,
             borderRadius: 16,
             overflow: 'hidden',
-            background: '#050816',
+            background: '#070408',
             border: `1px solid ${S.border}`,
             position: 'relative',   // add this
           }}
@@ -495,7 +495,7 @@ function KnowledgeGraphPage() {
             }}
           >
             <Background color="rgba(255,255,255,0.06)" gap={28} size={1} />
-            <Controls style={{ background: '#0b1326', border: '1px solid #1E293B', borderRadius: 10 }} />
+            <Controls style={{ background: '#110202', border: '1px solid rgba(255,255,255,0.10)', borderRadius: 10 }} />
           </ReactFlow>
 
           {/* Node detail side panel */}

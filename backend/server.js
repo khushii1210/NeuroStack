@@ -14,9 +14,17 @@ const aiRoutes = require("./routes/aiRoutes");
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: function(origin, callback) {
+      // allow frontend, VS Code extension (no origin), and Postman
+      const allowed = ['http://localhost:5173'];
+      if (!origin || allowed.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    },
     credentials: true
-}));
+  }));  
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);

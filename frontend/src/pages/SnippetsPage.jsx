@@ -5,15 +5,37 @@ import LayoutToggle from '../components/LayoutToggle';
 import { useLayoutView, getLayoutContainerStyle, getLayoutVisibility } from '../hooks/useLayoutView';
 
 const S = {
-  surface: '#0b1326',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
-  accent: '#adc6ff',
-  purple: '#ddb7ff',
-  pink: '#f9a8d4',
-  coral: '#ffb4ab',
+  surface:       'rgba(255,255,255,0.06)',
+  border:        'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  muted:         '#d4b8b8',
+  dim:           '#7a5a5a',
+  accent:        '#f87171',
+  crimson:       '#dc2626',
+  crimsonLight:  '#f87171',
+  crimsonSoft:   'rgba(239,68,68,0.12)',
+  crimsonBorder: 'rgba(239,68,68,0.25)',
+  mono:          "'Geist Mono', monospace",
+};
+
+const TAG_STYLES = [
+  { bg: 'rgba(239,68,68,0.12)',  border: 'rgba(239,68,68,0.25)',  color: '#f87171' },
+  { bg: 'rgba(251,146,60,0.12)', border: 'rgba(251,146,60,0.25)', color: '#fb923c' },
+  { bg: 'rgba(250,204,21,0.12)', border: 'rgba(250,204,21,0.25)', color: '#fbbf24' },
+  { bg: 'rgba(255,255,255,0.08)',border: 'rgba(255,255,255,0.15)',color: '#d4b8b8' },
+];
+
+const inputStyle = {
+  width: '100%',
+  padding: '14px 18px',
+  borderRadius: 10,
+  background: 'rgba(0,0,0,0.3)',
+  border: '1px solid rgba(255,255,255,0.10)',
+  color: '#fff5f5',
+  fontSize: 14,
+  outline: 'none',
+  boxSizing: 'border-box',
+  fontFamily: 'inherit',
 };
 
 const LANGUAGES = ['javascript', 'typescript', 'python', 'sql', 'bash', 'css', 'go', 'other'];
@@ -29,32 +51,12 @@ const LANG_COLORS = {
   other: { bg: 'rgba(148,163,184,0.12)', border: 'rgba(148,163,184,0.25)', color: '#94a3b8' },
 };
 
-const TAG_STYLES = [
-  { bg: 'rgba(221,183,255,0.12)', border: 'rgba(221,183,255,0.25)', color: '#ddb7ff' },
-  { bg: 'rgba(173,198,255,0.12)', border: 'rgba(173,198,255,0.25)', color: '#adc6ff' },
-  { bg: 'rgba(255,180,171,0.12)', border: 'rgba(255,180,171,0.25)', color: '#ffb4ab' },
-  { bg: 'rgba(60,221,199,0.12)', border: 'rgba(60,221,199,0.25)', color: '#3cddc7' },
-];
-
-const inputStyle = {
-  width: '100%',
-  padding: '14px 18px',
-  borderRadius: 10,
-  background: '#020617',
-  border: '1px solid #1E293B',
-  color: '#dae2fd',
-  fontSize: 14,
-  outline: 'none',
-  boxSizing: 'border-box',
-  fontFamily: 'inherit',
-};
-
 const selectStyle = {
   padding: '10px 14px',
   borderRadius: 10,
-  background: '#020617',
-  border: '1px solid #1E293B',
-  color: '#dae2fd',
+  background: 'rgba(0,0,0,0.3)',
+  border: '1px solid rgba(255,255,255,0.10)',
+  color: '#fff5f5',
   fontSize: 13,
   outline: 'none',
   fontFamily: 'inherit',
@@ -88,17 +90,6 @@ function SnippetsPage() {
   const [form, setForm] = useState({ title: '', code: '', language: 'javascript', description: '', tags: '' });
   const [layout, setLayout] = useLayoutView('snippets', 'double');
 
-  useEffect(() => {
-    if (selectedSnippet) {
-      window.history.pushState({ detail: true }, '');
-      const handler = () => setSelectedSnippet(null);
-      window.addEventListener('popstate', handler);
-      return () => window.removeEventListener('popstate', handler);
-    }
-  }, [selectedSnippet]);
-
-  useEffect(() => { fetchSnippets(); }, []);
-
   const fetchSnippets = async () => {
     try {
       const res = await getSnippets();
@@ -109,6 +100,16 @@ function SnippetsPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => { fetchSnippets(); }, []);
+
+  useEffect(() => {
+    if (!selectedSnippet) return;
+    window.history.pushState({ detail: true }, '');
+    const handler = () => setTimeout(() => setSelectedSnippet(null), 0);
+    window.addEventListener('popstate', handler);
+    return () => window.removeEventListener('popstate', handler);
+  }, [selectedSnippet]);
 
   const handleCreate = async () => {
     if (!form.title.trim() || !form.code.trim()) return;
@@ -218,14 +219,14 @@ function SnippetsPage() {
               })}
             </div>
           )}
-          <div style={{ background: '#020617', border: `1px solid ${S.border}`, borderRadius: 16, overflow: 'hidden' }}>
+          <div style={{ background: 'rgba(0,0,0,0.3)', border: `1px solid ${S.border}`, borderRadius: 16, overflow: 'hidden' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '12px 18px', borderBottom: `1px solid ${S.border}` }}>
               <span style={{ color: lc.color, fontSize: 11, fontFamily: 'monospace' }}>{snippet.language}</span>
               <button
                 type="button"
                 onClick={() => handleCopy(snippet.id, snippet.code)}
                 style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'none', border: 'none', cursor: 'pointer', color: S.dim, fontSize: 12, fontFamily: 'monospace' }}
-                onMouseOver={e => { e.currentTarget.style.color = S.purple; }}
+                onMouseOver={e => { e.currentTarget.style.color = S.crimsonLight; }}
                 onMouseOut={e => { e.currentTarget.style.color = S.dim; }}
               >
                 {copiedId === snippet.id ? <Check size={14} style={{ color: '#4ade80' }} /> : <Copy size={14} />}
@@ -265,7 +266,7 @@ function SnippetsPage() {
           }}>
             Tools
           </p>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
             Snippets
           </h1>
           <p style={{ color: S.muted, fontSize: 15, margin: '10px 0 0' }}>
@@ -285,8 +286,8 @@ function SnippetsPage() {
             padding: '12px 20px',
             borderRadius: 10,
             border: 'none',
-            background: '#adc6ff',
-            color: '#002e6a',
+            background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+            color: '#fff',
             fontWeight: 700,
             fontSize: 13,
             fontFamily: 'monospace',
@@ -331,8 +332,8 @@ function SnippetsPage() {
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search snippets..."
             style={{ ...inputStyle, paddingLeft: 44 }}
-            onFocus={(e) => { e.target.style.borderColor = '#adc6ff'; }}
-            onBlur={(e) => { e.target.style.borderColor = '#1E293B'; }}
+            onFocus={(e) => { e.target.style.borderColor = 'rgba(239,68,68,0.4)'; }}
+            onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; }}
           />
         </div>
         <LayoutToggle layout={layout} onChange={setLayout} />
@@ -342,7 +343,7 @@ function SnippetsPage() {
       {creating && (
         <div style={{
           background: S.surface,
-          border: '1px solid rgba(221,183,255,0.25)',
+          border: '1px solid rgba(239,68,68,0.25)',
           borderRadius: 16,
           padding: '28px 30px',
           marginBottom: 28,
@@ -398,7 +399,7 @@ function SnippetsPage() {
             rows={8}
             style={{
               width: '100%',
-              background: '#020617',
+              background: 'rgba(0,0,0,0.3)',
               border: `1px solid ${S.border}`,
               borderRadius: 10,
               color: '#4ade80',
@@ -438,9 +439,9 @@ function SnippetsPage() {
                 gap: 8,
                 padding: '10px 18px',
                 borderRadius: 10,
-                border: '1px solid rgba(221,183,255,0.35)',
-                background: 'rgba(221,183,255,0.12)',
-                color: S.purple,
+                border: '1px solid rgba(239,68,68,0.35)',
+                background: 'rgba(239,68,68,0.12)',
+                color: '#f87171',
                 fontSize: 13,
                 fontFamily: 'monospace',
                 cursor: 'pointer',
@@ -503,7 +504,7 @@ function SnippetsPage() {
                 transition: 'border-color 0.15s',
                 cursor: editingId === snippet.id ? 'default' : 'pointer',
               }}
-              onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(221,183,255,0.2)'; }}
+              onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.2)'; }}
               onMouseOut={(e) => { e.currentTarget.style.borderColor = S.border; }}
               onClick={() => { if (editingId !== snippet.id) setSelectedSnippet(snippet.id); }}
             >
@@ -561,9 +562,9 @@ function SnippetsPage() {
                         gap: 6,
                         padding: '8px 14px',
                         borderRadius: 8,
-                        border: '1px solid rgba(221,183,255,0.35)',
-                        background: 'rgba(221,183,255,0.12)',
-                        color: S.purple,
+                        border: '1px solid rgba(239,68,68,0.35)',
+                        background: 'rgba(239,68,68,0.12)',
+                        color: S.crimsonLight,
                         fontSize: 12,
                         fontFamily: 'monospace',
                         cursor: 'pointer',
@@ -603,7 +604,7 @@ function SnippetsPage() {
                     borderBottom: visibility.showCode ? `1px solid ${S.border}` : 'none',
                   }}>
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, minWidth: 0, flex: 1 }}>
-                      {layout !== 'triple' && <Code2 size={16} style={{ color: S.purple, flexShrink: 0, marginTop: 2 }} />}
+                      {layout !== 'triple' && <Code2 size={16} style={{ color: S.crimsonLight, flexShrink: 0, marginTop: 2 }} />}
                       <div style={{ minWidth: 0, flex: 1 }}>
                         <h3 style={{
                           color: S.text,
@@ -666,7 +667,7 @@ function SnippetsPage() {
                         type="button"
                         onClick={(e) => { e.stopPropagation(); handleCopy(snippet.id, snippet.code); }}
                         style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 6, color: S.dim }}
-                        onMouseOver={(e) => { e.currentTarget.style.color = S.purple; }}
+                        onMouseOver={(e) => { e.currentTarget.style.color = S.crimsonLight; }}
                         onMouseOut={(e) => { e.currentTarget.style.color = S.dim; }}
                       >
                         {copiedId === snippet.id ? <Check size={15} style={{ color: '#4ade80' }} /> : <Copy size={15} />}
@@ -693,7 +694,7 @@ function SnippetsPage() {
                   </div>
                   {visibility.showCode && (
                     <div style={{
-                      background: '#020617',
+                      background: 'rgba(0,0,0,0.3)',
                       padding: '16px 20px',
                       maxHeight: 192,
                       overflow: 'auto',

@@ -15,8 +15,8 @@ function LayoutToggle({ layout, onChange }) {
         gap: 4,
         padding: 4,
         borderRadius: 10,
-        border: '1px solid #1E293B',
-        background: '#0b1326',
+        border: '1px solid rgba(255,255,255,0.10)',
+        background: 'rgba(255,255,255,0.06)',
         flexShrink: 0,
       }}
       role="group"
@@ -39,17 +39,17 @@ function LayoutToggle({ layout, onChange }) {
               width: 36,
               height: 36,
               borderRadius: 8,
-              border: active ? '1px solid rgba(173,198,255,0.25)' : '1px solid transparent',
-              background: active ? 'rgba(173,198,255,0.12)' : 'transparent',
-              color: active ? '#adc6ff' : '#64748b',
+              border: active ? '1px solid rgba(239,68,68,0.25)' : '1px solid transparent',
+              background: active ? 'rgba(239,68,68,0.12)' : 'transparent',
+              color: active ? '#fca5a5' : '#7a5a5a',
               cursor: 'pointer',
               transition: 'all 0.15s',
             }}
             onMouseOver={(e) => {
-              if (!active) e.currentTarget.style.color = '#8c909f';
+              if (!active) e.currentTarget.style.color = '#d4b8b8';
             }}
             onMouseOut={(e) => {
-              if (!active) e.currentTarget.style.color = '#64748b';
+              if (!active) e.currentTarget.style.color = '#7a5a5a';
             }}
           >
             <Icon size={16} />

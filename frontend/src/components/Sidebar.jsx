@@ -1,26 +1,39 @@
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FileText, Code2, Bug,
-  Network, Bot, Settings, Zap, LogOut,
+  Network, Bot, Settings, Terminal, LogOut,
 } from 'lucide-react';
 import useAuthStore from '../store/authStore';
 import axios from '../api/axios';
 
 const NAV_ITEMS = [
   { label: 'WORKSPACE', links: [
-    { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', activeColor: '#adc6ff' },
+    { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
   ]},
   { label: 'TOOLS', links: [
-    { to: '/notes', icon: FileText, label: 'Notes', activeColor: '#3cddc7' },
-    { to: '/snippets', icon: Code2, label: 'Snippets', activeColor: '#ddb7ff' },
-    { to: '/bugs', icon: Bug, label: 'Bug Journal', activeColor: '#ffb4ab' },
-    { to: '/graph', icon: Network, label: 'Knowledge Graph', activeColor: '#adc6ff' },
-    { to: '/ai', icon: Bot, label: 'AI Assistant', activeColor: '#ddb7ff' },
+    { to: '/notes',    icon: FileText, label: 'Notes'           },
+    { to: '/snippets', icon: Code2,    label: 'Snippets'        },
+    { to: '/bugs',     icon: Bug,      label: 'Bug Journal'     },
+    { to: '/graph',    icon: Network,  label: 'Knowledge Graph' },
+    { to: '/ai',       icon: Bot,      label: 'AI Assistant'    },
   ]},
   { label: 'SYSTEM', links: [
-    { to: '/settings', icon: Settings, label: 'Settings', activeColor: '#8c909f' },
+    { to: '/settings', icon: Settings, label: 'Settings' },
   ]},
 ];
+
+const S = {
+  bg:           '#110202',
+  border:       '#2d0a0a',
+  text:         '#fff5f5',
+  textMid:      '#d4b8b8',
+  textDim:      '#7a5a5a',
+  crimson:      '#dc2626',
+  crimsonLight: '#f87171',
+  crimsonSoft:  'rgba(239,68,68,0.12)',
+  crimsonBorder:'rgba(239,68,68,0.25)',
+  mono:         "'Geist Mono', monospace",
+};
 
 export default function Sidebar() {
   const { user, logout } = useAuthStore();
@@ -34,43 +47,34 @@ export default function Sidebar() {
 
   return (
     <div style={{
-      height: '100vh',
-      width: 252,
-      display: 'flex',
-      flexDirection: 'column',
-      flexShrink: 0,
-      background: '#0b1326',
-      borderRight: '1px solid #1E293B',
+      height: '100vh', width: 252,
+      display: 'flex', flexDirection: 'column', flexShrink: 0,
+      background: S.bg,
+      borderRight: `1px solid rgba(255,255,255,0.08)`,
     }}>
-      <div style={{ padding: '24px 22px 20px', borderBottom: '1px solid #1E293B' }}>
+
+      {/* Logo */}
+      <div style={{ padding: '24px 22px 20px', borderBottom: `1px solid #2d0a0a` }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{
-            width: 32,
-            height: 32,
-            borderRadius: 8,
-            background: 'linear-gradient(135deg, #9fc2fb, #51c3f8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
+            width: 32, height: 32, borderRadius: 8,
+            background: S.crimsonSoft,
+            border: `1px solid ${S.crimsonBorder}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            <Zap style={{ width: 16, height: 16, color: '#fff' }} />
+            <Terminal style={{ width: 15, height: 15, color: S.crimsonLight }} />
           </div>
           <div>
             <h1 style={{
-              fontSize: 15,
-              fontWeight: 700,
-              letterSpacing: '-0.02em',
-              color: '#adc6ff',
-              margin: 0,
+              fontSize: 13, fontWeight: 700, letterSpacing: '0.08em',
+              textTransform: 'uppercase', color: S.text, margin: 0,
+              fontFamily: S.mono,
             }}>
               NeuroStack
             </h1>
             <p style={{
-              fontSize: 10,
-              color: '#475569',
-              margin: '2px 0 0',
-              letterSpacing: '0.12em',
-              fontFamily: 'monospace',
+              fontSize: 9, color: S.textDim, margin: '2px 0 0',
+              letterSpacing: '0.12em', fontFamily: S.mono,
             }}>
               DEV OS
             </p>
@@ -78,48 +82,38 @@ export default function Sidebar() {
         </div>
       </div>
 
+      {/* Nav */}
       <nav style={{ flex: 1, overflowY: 'auto', padding: '16px 12px' }}>
         {NAV_ITEMS.map((section) => (
           <div key={section.label} style={{ marginBottom: 24 }}>
             <p style={{
-              fontSize: 9,
-              color: '#475569',
-              letterSpacing: '0.18em',
-              fontWeight: 600,
-              padding: '0 12px',
-              marginBottom: 8,
-              textTransform: 'uppercase',
-              fontFamily: 'monospace',
+              fontSize: 9, color: S.textDim, letterSpacing: '0.18em',
+              fontWeight: 600, padding: '0 12px', marginBottom: 8,
+              textTransform: 'uppercase', fontFamily: S.mono,
             }}>
               {section.label}
             </p>
-            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 4 }}>
-              {section.links.map(({ to, icon: Icon, label, activeColor }) => (
+            <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 2 }}>
+              {section.links.map(({ to, icon: Icon, label }) => (
                 <li key={to}>
                   <NavLink
                     to={to}
                     end={to === '/dashboard'}
                     style={({ isActive }) => ({
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 12,
-                      padding: '10px 12px',
-                      borderRadius: 10,
-                      fontSize: 13,
-                      textDecoration: 'none',
+                      display: 'flex', alignItems: 'center', gap: 12,
+                      padding: '10px 12px', borderRadius: 8,
+                      fontSize: 13, textDecoration: 'none',
                       transition: 'all 0.15s',
-                      background: isActive ? 'rgba(173,198,255,0.08)' : 'transparent',
-                      border: isActive ? '1px solid rgba(173,198,255,0.15)' : '1px solid transparent',
-                      color: isActive ? '#dae2fd' : '#8c909f',
+                      background: isActive ? S.crimsonSoft : 'transparent',
+                      border: `1px solid ${isActive ? S.crimsonBorder : 'transparent'}`,
+                      color: isActive ? '#fca5a5' : S.textDim,
                     })}
                   >
                     {({ isActive }) => (
                       <>
                         <Icon style={{
-                          width: 16,
-                          height: 16,
-                          flexShrink: 0,
-                          color: isActive ? activeColor : '#64748b',
+                          width: 15, height: 15, flexShrink: 0,
+                          color: isActive ? S.crimsonLight : S.textDim,
                         }} />
                         <span>{label}</span>
                       </>
@@ -132,42 +126,28 @@ export default function Sidebar() {
         ))}
       </nav>
 
-      <div style={{ padding: '18px 20px', borderTop: '1px solid #1E293B' }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+      {/* User */}
+      <div style={{ padding: '16px 18px', borderTop: `1px solid #2d0a0a` }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{
-            width: 34,
-            height: 34,
-            borderRadius: '50%',
-            background: 'linear-gradient(135deg, #9fc2fb, #51c3f8)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#002e6a',
-            fontSize: 13,
-            fontWeight: 700,
-            flexShrink: 0,
+            width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
+            background: S.crimsonSoft,
+            border: `1px solid ${S.crimsonBorder}`,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            color: S.crimsonLight, fontSize: 13, fontWeight: 700,
           }}>
             {user?.name?.charAt(0).toUpperCase()}
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             <p style={{
-              color: '#dae2fd',
-              fontSize: 13,
-              fontWeight: 500,
-              margin: 0,
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              color: S.text, fontSize: 13, fontWeight: 500, margin: 0,
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {user?.name}
             </p>
             <p style={{
-              color: '#475569',
-              fontSize: 11,
-              margin: '2px 0 0',
-              overflow: 'hidden',
-              textOverflow: 'ellipsis',
-              whiteSpace: 'nowrap',
+              color: S.textDim, fontSize: 11, margin: '2px 0 0',
+              overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
             }}>
               {user?.email}
             </p>
@@ -176,18 +156,14 @@ export default function Sidebar() {
             onClick={handleLogout}
             title="Logout"
             style={{
-              background: 'none',
-              border: 'none',
-              cursor: 'pointer',
-              padding: 8,
-              borderRadius: 8,
-              color: '#64748b',
+              background: 'none', border: 'none', cursor: 'pointer',
+              padding: 8, borderRadius: 8, color: S.textDim,
               transition: 'color 0.15s',
             }}
-            onMouseOver={(e) => { e.currentTarget.style.color = '#ffb4ab'; }}
-            onMouseOut={(e) => { e.currentTarget.style.color = '#64748b'; }}
+            onMouseOver={e => e.currentTarget.style.color = S.crimsonLight}
+            onMouseOut={e => e.currentTarget.style.color = S.textDim}
           >
-            <LogOut style={{ width: 16, height: 16 }} />
+            <LogOut style={{ width: 15, height: 15 }} />
           </button>
         </div>
       </div>

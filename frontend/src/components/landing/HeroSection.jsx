@@ -1,180 +1,130 @@
 import { useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Play } from 'lucide-react';
+import { StickyNote, Code2, Bug, Sparkles, Network, Zap } from 'lucide-react';
 import { gsap } from 'gsap';
-import ProductWindows from './ProductWindows';
+import { C } from './tokens';
+
+const FEATURES = [
+  { icon: StickyNote, label: 'Smart Notes'       },
+  { icon: Code2,      label: 'Snippet Vault'      },
+  { icon: Bug,        label: 'Bug Tracker'        },
+  { icon: Sparkles,   label: 'AI Assistant'       },
+  { icon: Network,    label: 'Knowledge Graph'    },
+  { icon: Zap,        label: 'VS Code Extension'  },
+];
 
 export default function HeroSection() {
-  const navigate = useNavigate();
-  const headlineRef = useRef(null);
-  const descRef = useRef(null);
-  const ctaRef = useRef(null);
-  const statsRef = useRef(null);
+  const eyeRef  = useRef(null);
+  const headRef = useRef(null);
+  const subRef  = useRef(null);
+  const featRef = useRef(null);
 
   useEffect(() => {
-    gsap.set([headlineRef.current, descRef.current, ctaRef.current, statsRef.current], {
-      opacity: 0, y: 30,
-    });
+    const els = [eyeRef.current, headRef.current, subRef.current, featRef.current].filter(Boolean);
+    gsap.set(els, { opacity: 0, y: 28 });
     const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
-    tl.to(headlineRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.2)
-      .to(descRef.current,     { opacity: 1, y: 0, duration: 0.7 }, 0.45)
-      .to(ctaRef.current,      { opacity: 1, y: 0, duration: 0.6 }, 0.65)
-      .to(statsRef.current,    { opacity: 1, y: 0, duration: 0.6 }, 0.8);
+    tl.to(eyeRef.current,  { opacity: 1, y: 0, duration: 0.6 }, 0.1)
+      .to(headRef.current, { opacity: 1, y: 0, duration: 0.9 }, 0.25)
+      .to(subRef.current,  { opacity: 1, y: 0, duration: 0.7 }, 0.5)
+      .to(featRef.current, { opacity: 1, y: 0, duration: 0.6 }, 0.65);
   }, []);
 
   return (
     <section style={{
-      position: 'relative',
-      width: '100%',
-      minHeight: '100vh',
-      overflow: 'hidden',
-      paddingTop: 64,
+      padding: '48px 64px 80px',
+      position: 'relative', zIndex: 10,
+      display: 'grid',
+      gridTemplateColumns: '1fr 1fr',
+      gap: 80,
+      alignItems: 'start',
     }}>
 
-      {/* grid background */}
-      <div style={{
-        position: 'absolute', inset: 0, pointerEvents: 'none',
-        backgroundImage: `linear-gradient(to right, rgba(30,41,59,0.5) 1px, transparent 1px),
-                          linear-gradient(to bottom, rgba(30,41,59,0.5) 1px, transparent 1px)`,
-        backgroundSize: '32px 32px',
-        opacity: 0.4,
-      }} />
-
-      {/* ambient glow right side */}
-      <div style={{
-        position: 'absolute', right: '5%', top: '30%',
-        width: '50%', height: '60%', pointerEvents: 'none',
-        background: 'radial-gradient(ellipse at center, rgba(96,165,250,0.08) 0%, rgba(168,85,247,0.05) 40%, transparent 70%)',
-        filter: 'blur(60px)',
-      }} />
-
-      <div style={{
-        position: 'relative', zIndex: 10,
-        width: '100%', height: '100%',
-        minHeight: 'calc(100vh - 64px)',
-        display: 'flex',
-        alignItems: 'center',
-      }}>
-
-        {/* LEFT — hero text */}
-        <div style={{
-          width: '50%',
-          padding: '80px 0 80px 60px',
-          flexShrink: 0,
-        }}>
-
-          <div ref={headlineRef}>
-            <h1 style={{
-              fontSize: 'clamp(56px, 7vw, 96px)',
-              fontWeight: 700,
-              lineHeight: 0.9,
-              letterSpacing: '-0.03em',
-              color: '#dae2fd',
-              margin: '0 0 32px 0',
-            }}>
-              <span style={{ display: 'block' }}>Your</span>
-              <span style={{
-                display: 'block',
-                background: 'linear-gradient(135deg, #adc6ff 0%, #ddb7ff 100%)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}>
-                Second Brain
-              </span>
-              <span style={{ display: 'block' }}>for Building Software</span>
-            </h1>
-          </div>
-
-          <p ref={descRef} style={{
-            color: '#8c909f',
-            fontSize: 16, lineHeight: 1.7,
-            margin: '0 0 48px 0',
-            maxWidth: 480,
+      {/* LEFT — headline + description */}
+      <div>
+        <div ref={eyeRef}>
+          <span style={{
+            color: C.crimson, fontFamily: C.mono,
+            fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
           }}>
-            Capture notes. Save snippets. Track bugs.
-            Visualize knowledge. Ask AI.{' '}
-            <strong style={{ color: '#dae2fd' }}>Everything connected.</strong>
-          </p>
-
-          <div ref={ctaRef} style={{ display: 'flex', gap: 16, marginBottom: 80 }}>
-            <button
-              onClick={() => navigate('/register')}
-              onMouseOver={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
-              onMouseOut={e => { e.currentTarget.style.transform = 'scale(1)'; }}
-              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.95)'; }}
-              onMouseUp={e => { e.currentTarget.style.transform = 'scale(1.05)'; }}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '16px 32px', borderRadius: 12,
-                background: '#adc6ff',
-                color: '#002e6a',
-                fontWeight: 700, fontSize: 14,
-                border: 'none', cursor: 'pointer',
-                transition: 'transform 0.2s',
-              }}
-            >
-              Start Building
-              <ArrowRight style={{ width: 16, height: 16 }} />
-            </button>
-
-            <button
-              onMouseOver={e => { e.currentTarget.style.background = '#31394d'; }}
-              onMouseOut={e => { e.currentTarget.style.background = '#171f33'; }}
-              onMouseDown={e => { e.currentTarget.style.transform = 'scale(0.95)'; }}
-              onMouseUp={e => { e.currentTarget.style.transform = 'scale(1)'; }}
-              style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '16px 32px', borderRadius: 12,
-                background: '#171f33',
-                border: '1px solid #1E293B',
-                color: '#dae2fd',
-                fontWeight: 700, fontSize: 14,
-                cursor: 'pointer',
-                transition: 'background 0.2s, transform 0.2s',
-              }}
-            >
-              <Play style={{ width: 16, height: 16 }} />
-              Watch Demo
-            </button>
-          </div>
-
-          <div ref={statsRef} style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, auto)',
-            gap: '0 48px',
-            width: 'fit-content',
-          }}>
-            {[
-              { value: '12k+', label: 'DEVELOPERS' },
-              { value: '2M+',  label: 'NOTES CREATED' },
-              { value: '98%',  label: 'SATISFACTION' },
-            ].map(stat => (
-              <div key={stat.label}>
-                <p style={{ color: '#dae2fd', fontWeight: 600, fontSize: 32, margin: 0, letterSpacing: '-0.02em' }}>
-                  {stat.value}
-                </p>
-                <p style={{ color: '#8c909f', fontSize: 12, marginTop: 4, letterSpacing: '0.1em' }}>
-                  {stat.label}
-                </p>
-              </div>
-            ))}
-          </div>
-
+            — developer knowledge OS
+          </span>
         </div>
 
-        {/* RIGHT — floating cards */}
-        <div style={{
-          position: 'absolute',
-          top: 0, right: 0,
-          width: '55%', height: '100%',
-          pointerEvents: 'none',
-          zIndex: 5,
-        }}>
-          <ProductWindows />
+        <div ref={headRef} style={{ margin: '20px 0 0' }}>
+          <div style={{
+            fontSize: 'clamp(56px, 7.5vw, 104px)',
+            fontWeight: 700, lineHeight: 0.93,
+            letterSpacing: '-0.025em',
+            color: C.text, fontStyle: 'italic',
+          }}>
+            Think.
+          </div>
+          <div style={{
+            fontSize: 'clamp(56px, 7.5vw, 104px)',
+            fontWeight: 700, lineHeight: 0.93,
+            letterSpacing: '-0.025em',
+            color: C.text,
+            paddingLeft: '6vw',
+          }}>
+            Code.
+          </div>
+          <div style={{
+            fontSize: 'clamp(56px, 7.5vw, 104px)',
+            fontWeight: 700, lineHeight: 0.93,
+            letterSpacing: '-0.025em',
+            fontStyle: 'italic',
+            background: 'linear-gradient(135deg, #ef4444 0%, #f97316 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+          }}>
+            Remember.
+          </div>
         </div>
 
+        <p ref={subRef} style={{
+          color: C.textDim, fontSize: 15, lineHeight: 1.8,
+          maxWidth: 400, margin: '32px 0 0',
+        }}>
+          Notes, snippets, bug reports, AI conversations, and a knowledge graph — one workspace that captures how you actually think.
+        </p>
       </div>
+
+      {/* RIGHT — feature list, labels only */}
+      <div ref={featRef} style={{ paddingTop: 8 }}>
+        <p style={{
+          fontSize: 11, color: C.textDim, fontFamily: C.mono,
+          textTransform: 'uppercase', letterSpacing: '0.1em',
+          margin: '0 0 20px',
+        }}>
+          What's inside
+        </p>
+        <div style={{ display: 'flex', flexDirection: 'column' }}>
+          {FEATURES.map(({ icon: Icon, label }, i) => (
+            <div
+              key={label}
+              style={{
+                display: 'flex', alignItems: 'center', gap: 14,
+                padding: '14px 0',
+                borderBottom: i < FEATURES.length - 1
+                  ? '1px solid rgba(255,255,255,0.05)'
+                  : 'none',
+              }}
+            >
+              <div style={{
+                width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                background: C.crimsonSoft,
+                border: `1px solid ${C.crimsonBorder}`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+              }}>
+                <Icon size={14} style={{ color: C.crimsonLight }} />
+              </div>
+              <span style={{ color: C.text, fontSize: 14, fontWeight: 600 }}>
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
+
     </section>
   );
 }

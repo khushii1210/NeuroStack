@@ -4,31 +4,35 @@ import { getNotes, createNote, updateNote, deleteNote } from '../api/notes';
 import LayoutToggle from '../components/LayoutToggle';
 import { useLayoutView, getLayoutContainerStyle, getLayoutVisibility } from '../hooks/useLayoutView';
 const S = {
-  surface: '#0b1326',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
-  accent: '#adc6ff',
-  cyan: '#3cddc7',
-  purple: '#ddb7ff',
-  coral: '#ffb4ab',
+  surface:       'rgba(255,255,255,0.06)',
+  border:        'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  muted:         '#d4b8b8',
+  dim:           '#7a5a5a',
+  cyan:          '#f87171',
+  coral:         '#f87171',
+  accent:        '#f87171',
+  crimson:       '#dc2626',
+  crimsonLight:  '#f87171',
+  crimsonSoft:   'rgba(239,68,68,0.12)',
+  crimsonBorder: 'rgba(239,68,68,0.25)',
+  mono:          "'Geist Mono', monospace",
 };
 
 const TAG_STYLES = [
-  { bg: 'rgba(60,221,199,0.12)', border: 'rgba(60,221,199,0.25)', color: '#3cddc7' },
-  { bg: 'rgba(221,183,255,0.12)', border: 'rgba(221,183,255,0.25)', color: '#ddb7ff' },
-  { bg: 'rgba(173,198,255,0.12)', border: 'rgba(173,198,255,0.25)', color: '#adc6ff' },
-  { bg: 'rgba(255,180,171,0.12)', border: 'rgba(255,180,171,0.25)', color: '#ffb4ab' },
+  { bg: 'rgba(239,68,68,0.12)',  border: 'rgba(239,68,68,0.25)',  color: '#f87171' },
+  { bg: 'rgba(251,146,60,0.12)', border: 'rgba(251,146,60,0.25)', color: '#fb923c' },
+  { bg: 'rgba(250,204,21,0.12)', border: 'rgba(250,204,21,0.25)', color: '#fbbf24' },
+  { bg: 'rgba(255,255,255,0.08)',border: 'rgba(255,255,255,0.15)',color: '#d4b8b8' },
 ];
 
 const inputStyle = {
   width: '100%',
   padding: '14px 18px',
   borderRadius: 10,
-  background: '#020617',
-  border: '1px solid #1E293B',
-  color: '#dae2fd',
+  background: 'rgba(0,0,0,0.3)',
+  border: '1px solid rgba(255,255,255,0.10)',
+  color: '#fff5f5',
   fontSize: 14,
   outline: 'none',
   boxSizing: 'border-box',
@@ -46,20 +50,6 @@ function NotesPage() {
   const [error, setError] = useState('');
   const [layout, setLayout] = useLayoutView('notes', 'double');
 
-  // push a history entry when opening detail so browser back closes it
-  useEffect(() => {
-    if (selectedNote) {
-      window.history.pushState({ detail: true }, '');
-      const handler = () => setSelectedNote(null);
-      window.addEventListener('popstate', handler);
-      return () => window.removeEventListener('popstate', handler);
-    }
-  }, [selectedNote]);
-
-  useEffect(() => {
-    fetchNotes();
-  }, []);
-
   const fetchNotes = async () => {
     try {
       const res = await getNotes();
@@ -70,6 +60,19 @@ function NotesPage() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  // push a history entry when opening detail so browser back closes it
+  useEffect(() => {
+    if (!selectedNote) return;
+    window.history.pushState({ detail: true }, '');
+    const handler = () => setTimeout(() => setSelectedNote(null), 0);
+    window.addEventListener('popstate', handler);
+    return () => window.removeEventListener('popstate', handler);
+  }, [selectedNote]);
 
   const handleCreate = async () => {
     if (!form.title.trim()) return;
@@ -200,7 +203,7 @@ function NotesPage() {
           }}>
             Tools
           </p>
-          <h1 className="text-3xl font-bold bg-gradient-to-r from-indigo-400 to-violet-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
             Notes
           </h1>
           <p style={{ color: S.muted, fontSize: 15, margin: '10px 0 0' }}>
@@ -220,8 +223,8 @@ function NotesPage() {
             padding: '12px 20px',
             borderRadius: 10,
             border: 'none',
-            background: '#adc6ff',
-            color: '#002e6a',
+            background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
+            color: '#fff',
             fontWeight: 700,
             fontSize: 13,
             fontFamily: 'monospace',
@@ -266,8 +269,8 @@ function NotesPage() {
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search notes..."
             style={{ ...inputStyle, paddingLeft: 44 }}
-            onFocus={(e) => { e.target.style.borderColor = '#adc6ff'; }}
-            onBlur={(e) => { e.target.style.borderColor = '#1E293B'; }}
+            onFocus={(e) => { e.target.style.borderColor = 'rgba(239,68,68,0.4)'; }}
+            onBlur={(e) => { e.target.style.borderColor = 'rgba(255,255,255,0.10)'; }}
           />
         </div>
         <LayoutToggle layout={layout} onChange={setLayout} />
@@ -277,7 +280,7 @@ function NotesPage() {
       {creating && (
         <div style={{
           background: S.surface,
-          border: '1px solid rgba(60,221,199,0.25)',
+          border: '1px solid rgba(239,68,68,0.25)',
           borderRadius: 16,
           padding: '28px 30px',
           marginBottom: 28,
@@ -291,7 +294,7 @@ function NotesPage() {
               width: '100%',
               background: 'transparent',
               border: 'none',
-              borderBottom: '1px solid #1E293B',
+              borderBottom: `1px solid ${S.border}`,
               color: S.text,
               fontSize: 20,
               fontWeight: 600,
@@ -327,7 +330,7 @@ function NotesPage() {
               width: '100%',
               background: 'transparent',
               border: 'none',
-              borderTop: '1px solid #1E293B',
+              borderTop: `1px solid ${S.border}`,
               color: S.dim,
               fontSize: 13,
               fontFamily: 'monospace',
@@ -345,9 +348,9 @@ function NotesPage() {
                 gap: 8,
                 padding: '10px 18px',
                 borderRadius: 10,
-                border: '1px solid rgba(60,221,199,0.35)',
-                background: 'rgba(60,221,199,0.12)',
-                color: S.cyan,
+                border: '1px solid rgba(239,68,68,0.35)',
+                background: 'rgba(239,68,68,0.12)',
+                color: '#f87171',
                 fontSize: 13,
                 fontFamily: 'monospace',
                 cursor: 'pointer',
@@ -410,7 +413,7 @@ function NotesPage() {
                 transition: 'border-color 0.15s',
                 cursor: editingId === note.id ? 'default' : 'pointer',
               }}
-              onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(173,198,255,0.2)'; }}
+              onMouseOver={(e) => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.2)'; }}
               onMouseOut={(e) => { e.currentTarget.style.borderColor = S.border; }}
               onClick={() => { if (editingId !== note.id) setSelectedNote(note.id); }}
             >
@@ -473,9 +476,9 @@ function NotesPage() {
                         gap: 6,
                         padding: '8px 14px',
                         borderRadius: 8,
-                        border: '1px solid rgba(60,221,199,0.35)',
-                        background: 'rgba(60,221,199,0.12)',
-                        color: S.cyan,
+                        border: '1px solid rgba(239,68,68,0.35)',
+                        background: 'rgba(239,68,68,0.12)',
+                        color: '#f87171',
                         fontSize: 12,
                         fontFamily: 'monospace',
                         cursor: 'pointer',

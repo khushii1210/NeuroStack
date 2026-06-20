@@ -3,11 +3,11 @@ import { Send, Bot, User, Sparkles, RotateCcw, Copy, Check } from 'lucide-react'
 import { sendMessage, getChatHistory, clearChatHistory } from '../api/ai';
 
 const S = {
-  surface: '#0b1326',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
+  surface:       'rgba(255,255,255,0.06)',
+  border:        'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  muted:         '#d4b8b8',
+  dim:           '#7a5a5a',
 };
 
 const SUGGESTIONS = [
@@ -31,8 +31,8 @@ function formatContent(content) {
       const code = part.replace(/```\w*\n?/, '').replace(/```$/, '');
       return (
         <pre key={i} style={{
-          background: '#020617',
-          border: '1px solid #1E293B',
+          background: 'rgba(0,0,0,0.3)',
+          border: `1px solid ${S.border}`,
           borderRadius: 10,
           padding: '12px 14px',
           margin: '8px 0',
@@ -137,10 +137,10 @@ function AIAssistantPage() {
             Tools
           </p>
           <h1
-            className="text-3xl font-bold bg-gradient-to-r from-green-400 to-cyan-400 bg-clip-text text-transparent"
+            className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent"
             style={{ margin: 0, display: 'flex', alignItems: 'center', gap: 10 }}
           >
-            <Sparkles size={24} style={{ color: '#22d3ee', flexShrink: 0 }} />
+            <Sparkles size={24} style={{ color: '#f87171', flexShrink: 0 }} />
             AI Assistant
           </h1>
           <p style={{ color: S.muted, fontSize: 15, margin: '10px 0 0' }}>
@@ -189,7 +189,7 @@ function AIAssistantPage() {
               cursor: 'pointer',
               transition: 'color 0.15s, border-color 0.15s',
             }}
-            onMouseOver={e => { e.currentTarget.style.color = '#22d3ee'; e.currentTarget.style.borderColor = 'rgba(34,211,238,0.4)'; }}
+            onMouseOver={e => { e.currentTarget.style.color = '#f87171'; e.currentTarget.style.borderColor = 'rgba(239,68,68,0.4)'; }}
             onMouseOut={e => { e.currentTarget.style.color = S.dim; e.currentTarget.style.borderColor = S.border; }}
           >
             {s}
@@ -223,8 +223,8 @@ function AIAssistantPage() {
               alignItems: 'center',
               justifyContent: 'center',
               background: msg.role === 'assistant'
-                ? 'linear-gradient(135deg, #06b6d4, #2563eb)'
-                : 'linear-gradient(135deg, #a855f7, #ec4899)',
+                ? 'linear-gradient(135deg, #dc2626, #991b1b)'
+                : 'linear-gradient(135deg, #fb923c, #c2410c)',
             }}>
               {msg.role === 'assistant'
                 ? <Bot size={16} style={{ color: '#fff' }} />
@@ -245,10 +245,10 @@ function AIAssistantPage() {
                 lineHeight: 1.65,
                 background: msg.role === 'assistant'
                   ? S.surface
-                  : 'rgba(168,85,247,0.12)',
+                  : 'rgba(251,146,60,0.08)',
                 border: msg.role === 'assistant'
                   ? `1px solid ${S.border}`
-                  : '1px solid rgba(168,85,247,0.3)',
+                  : '1px solid rgba(251,146,60,0.2)',
                 color: S.text,
               }}>
                 {formatContent(msg.content)}
@@ -278,7 +278,7 @@ function AIAssistantPage() {
             <div style={{
               width: 32, height: 32, borderRadius: '50%', flexShrink: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              background: 'linear-gradient(135deg, #06b6d4, #2563eb)',
+              background: 'linear-gradient(135deg, #dc2626, #991b1b)',
             }}>
               <Bot size={16} style={{ color: '#fff' }} />
             </div>
@@ -295,7 +295,7 @@ function AIAssistantPage() {
                 <span key={i} style={{
                   width: 8, height: 8,
                   borderRadius: '50%',
-                  background: '#22d3ee',
+                  background: '#f87171',
                   display: 'inline-block',
                   animation: 'bounce 0.6s infinite',
                   animationDelay: `${i * 0.15}s`,
@@ -319,7 +319,7 @@ function AIAssistantPage() {
           padding: '12px 16px',
           transition: 'border-color 0.15s',
         }}
-        onFocusCapture={e => { e.currentTarget.style.borderColor = 'rgba(34,211,238,0.4)'; }}
+        onFocusCapture={e => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.4)'; }}
         onBlurCapture={e => { e.currentTarget.style.borderColor = S.border; }}
       >
         <textarea
@@ -352,7 +352,7 @@ function AIAssistantPage() {
             padding: '10px 18px',
             borderRadius: 10,
             border: 'none',
-            background: 'linear-gradient(to right, #06b6d4, #2563eb)',
+            background: 'linear-gradient(135deg, #dc2626, #b91c1c)',
             color: '#fff',
             fontSize: 13,
             fontFamily: 'monospace',

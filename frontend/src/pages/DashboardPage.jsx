@@ -5,106 +5,77 @@ import { getStats } from '../api/dashboard';
 import useAuthStore from '../store/authStore';
 
 const S = {
-  bg: '#020617',
-  surface: '#0b1326',
-  surfaceAlt: '#171f33',
-  border: '#1E293B',
-  text: '#dae2fd',
-  muted: '#8c909f',
-  dim: '#475569',
-  accent: '#adc6ff',
-  cyan: '#3cddc7',
-  purple: '#ddb7ff',
-  coral: '#ffb4ab',
+  surface:  'rgba(255,255,255,0.06)',
+  border:   'rgba(255,255,255,0.10)',
+  text:          '#fff5f5',
+  textDim:       '#7a5a5a',
+  mono:          "'Geist Mono', monospace",
+  crimsonLight:  '#f87171',
 };
 
-const SEV = {
-  low: { bg: 'rgba(60,221,199,0.08)', border: 'rgba(60,221,199,0.25)', color: '#3cddc7' },
-  medium: { bg: 'rgba(173,198,255,0.08)', border: 'rgba(173,198,255,0.25)', color: '#adc6ff' },
-  high: { bg: 'rgba(255,180,171,0.08)', border: 'rgba(255,180,171,0.25)', color: '#ffb4ab' },
-  critical: { bg: 'rgba(255,100,100,0.08)', border: 'rgba(255,100,100,0.25)', color: '#ffb4ab' },
+const SEV_COLOR = {
+  low:      '#4ade80',
+  medium:   '#fbbf24',
+  high:     '#fb923c',
+  critical: '#f87171',
 };
 
-function StatCard({ icon: Icon, label, value, sub, accentBg, accentColor }) {
+function StatCard({ icon: Icon, label, value, sub, color }) {
   return (
     <div style={{
       background: S.surface,
       border: `1px solid ${S.border}`,
-      borderRadius: 16,
-      padding: '24px 26px',
+      borderRadius: 14,
+      padding: '22px 24px',
       display: 'flex',
       alignItems: 'center',
-      gap: 18,
-      boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
+      gap: 16,
     }}>
       <div style={{
-        width: 48,
-        height: 48,
-        borderRadius: 12,
-        background: accentBg,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-        border: `1px solid ${S.border}`,
+        width: 44, height: 44, borderRadius: 10, flexShrink: 0,
+        background: `${color}18`,
+        border: `1px solid ${color}35`,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <Icon style={{ width: 22, height: 22, color: accentColor }} />
+        <Icon style={{ width: 20, height: 20, color }} />
       </div>
       <div>
         <p style={{
-          color: S.muted,
-          fontSize: 11,
-          margin: 0,
-          letterSpacing: '0.1em',
-          fontFamily: 'monospace',
-          textTransform: 'uppercase',
+          color: S.textDim, fontSize: 10, margin: 0,
+          letterSpacing: '0.1em', fontFamily: S.mono, textTransform: 'uppercase',
         }}>
           {label}
         </p>
         <p style={{
-          color: S.text,
-          fontSize: 28,
-          fontWeight: 700,
-          margin: '6px 0 0',
-          letterSpacing: '-0.02em',
+          color: S.text, fontSize: 26, fontWeight: 700,
+          margin: '4px 0 0', letterSpacing: '-0.02em',
         }}>
           {value}
         </p>
-        {sub && (
-          <p style={{ color: S.dim, fontSize: 12, margin: '4px 0 0' }}>{sub}</p>
-        )}
+        {sub && <p style={{ color: S.textDim, fontSize: 11, margin: '3px 0 0' }}>{sub}</p>}
       </div>
     </div>
   );
 }
 
-function SectionCard({ title, onViewAll, accentColor, children }) {
+function SectionCard({ title, onViewAll, children }) {
   return (
     <div style={{
       background: S.surface,
       border: `1px solid ${S.border}`,
-      borderRadius: 16,
-      padding: '24px 26px',
-      boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
-      height: '100%',
+      borderRadius: 14,
+      padding: '22px 24px',
     }}>
       <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 20,
+        display: 'flex', justifyContent: 'space-between',
+        alignItems: 'center', marginBottom: 18,
       }}>
-        <h3 style={{ color: S.text, fontSize: 15, fontWeight: 600, margin: 0 }}>{title}</h3>
+        <h3 style={{ color: S.text, fontSize: 14, fontWeight: 600, margin: 0 }}>{title}</h3>
         <button
           onClick={onViewAll}
           style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            color: accentColor,
-            fontSize: 12,
-            fontFamily: 'monospace',
-            padding: 0,
+            background: 'none', border: 'none', cursor: 'pointer',
+            color: S.crimsonLight, fontSize: 11, fontFamily: S.mono, padding: 0,
           }}
         >
           View all →
@@ -116,23 +87,19 @@ function SectionCard({ title, onViewAll, accentColor, children }) {
 }
 
 function ListItem({ onClick, children }) {
-  const [hovered, setHovered] = useState(false);
+  const [hov, setHov] = useState(false);
   return (
     <li
       onClick={onClick}
-      onMouseOver={() => setHovered(true)}
-      onMouseOut={() => setHovered(false)}
+      onMouseOver={() => setHov(true)}
+      onMouseOut={() => setHov(false)}
       style={{
-        display: 'flex',
-        alignItems: 'flex-start',
-        gap: 14,
-        padding: '12px 14px',
-        borderRadius: 10,
-        cursor: 'pointer',
-        background: hovered ? 'rgba(173,198,255,0.06)' : 'rgba(255,255,255,0.02)',
-        border: `1px solid ${hovered ? 'rgba(173,198,255,0.12)' : 'transparent'}`,
+        display: 'flex', alignItems: 'flex-start', gap: 12,
+        padding: '10px 12px', borderRadius: 8,
+        cursor: 'pointer', listStyle: 'none',
+        background: hov ? 'rgba(239,68,68,0.06)' : 'rgba(255,255,255,0.02)',
+        border: `1px solid ${hov ? 'rgba(239,68,68,0.15)' : 'transparent'}`,
         transition: 'all 0.15s',
-        listStyle: 'none',
       }}
     >
       {children}
@@ -140,142 +107,90 @@ function ListItem({ onClick, children }) {
   );
 }
 
-function EmptyState({ text }) {
-  return <p style={{ color: S.dim, fontSize: 13, margin: 0, lineHeight: 1.6 }}>{text}</p>;
+function Tag({ children, color }) {
+  return (
+    <span style={{
+      fontSize: 10, padding: '2px 7px', borderRadius: 4,
+      background: `${color}15`,
+      border: `1px solid ${color}30`,
+      color, fontFamily: S.mono,
+    }}>
+      {children}
+    </span>
+  );
+}
+
+function Empty({ text }) {
+  return <p style={{ color: S.textDim, fontSize: 13, margin: 0 }}>{text}</p>;
 }
 
 export default function DashboardPage() {
-  const user = useAuthStore((state) => state.user);
+  const user = useAuthStore(s => s.user);
   const navigate = useNavigate();
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getStats()
-      .then((res) => setStats(res.data))
+      .then(r => setStats(r.data))
       .catch(() => {})
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <div style={{
-      padding: '40px 48px 48px',
-      minHeight: '100vh',
-      background: 'transparent',
-    }}>
-      <div style={{ marginBottom: 36 }}>
+    <div style={{ padding: '40px 48px 48px', minHeight: '100vh' }}>
+
+      {/* header */}
+      <div style={{ marginBottom: 32 }}>
         <p style={{
-          color: S.muted,
-          fontSize: 12,
-          fontFamily: 'monospace',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-          margin: '0 0 8px',
+          color: S.textDim, fontSize: 10, fontFamily: S.mono,
+          letterSpacing: '0.1em', textTransform: 'uppercase', margin: '0 0 8px',
         }}>
           Workspace
         </p>
-        <h1 style={{
-          color: S.text,
-          fontSize: 26,
-          fontWeight: 700,
-          margin: 0,
-          letterSpacing: '-0.02em',
-        }}>
+        <h1 className="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent" style={{ margin: 0 }}>
           Welcome back, {user?.name}
         </h1>
-        <p style={{ color: S.muted, fontSize: 15, margin: '10px 0 0', lineHeight: 1.6 }}>
+        <p style={{ color: S.textDim, fontSize: 14, margin: '8px 0 0' }}>
           Your knowledge at a glance
         </p>
       </div>
 
       {loading ? (
-        <p style={{ color: S.dim, fontSize: 14, fontFamily: 'monospace' }}>Loading...</p>
+        <p style={{ color: S.textDim, fontSize: 13, fontFamily: S.mono }}>Loading...</p>
       ) : (
         <>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 20,
-            marginBottom: 28,
-          }}>
+          {/* stat cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16, marginBottom: 20 }}>
+            <StatCard icon={FileText} label="Total Notes"  value={stats?.totalNotes ?? 0}   color="#f87171" />
+            <StatCard icon={Code2}    label="Snippets"     value={stats?.totalSnippets ?? 0} color="#fb923c" />
             <StatCard
-              icon={FileText}
-              label="Total Notes"
-              value={stats?.totalNotes ?? 0}
-              accentBg="rgba(60,221,199,0.12)"
-              accentColor={S.cyan}
-            />
-            <StatCard
-              icon={Code2}
-              label="Snippets"
-              value={stats?.totalSnippets ?? 0}
-              accentBg="rgba(221,183,255,0.12)"
-              accentColor={S.purple}
-            />
-            <StatCard
-              icon={Bug}
-              label="Bugs"
-              value={stats?.totalBugs ?? 0}
+              icon={Bug} label="Bugs" value={stats?.totalBugs ?? 0}
               sub={`${stats?.openBugs ?? 0} open · ${stats?.resolvedBugs ?? 0} resolved`}
-              accentBg="rgba(255,180,171,0.12)"
-              accentColor={S.coral}
+              color="#fbbf24"
             />
           </div>
 
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(3, 1fr)',
-            gap: 20,
-          }}>
-            <SectionCard title="Recent Notes" onViewAll={() => navigate('/notes')} accentColor={S.cyan}>
-              {!stats?.recentNotes?.length ? (
-                <EmptyState text="No notes yet." />
-              ) : (
-                <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {stats.recentNotes.map((note) => (
-                    <ListItem key={note.id} onClick={() => navigate('/notes')}>
-                      <FileText style={{ width: 15, height: 15, color: S.cyan, flexShrink: 0, marginTop: 2 }} />
-                      <div style={{ minWidth: 0, flex: 1 }}>
-                        <p style={{ color: S.text, fontSize: 13, fontWeight: 500, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {note.title}
-                        </p>
-                        {note.tags?.length > 0 && (
-                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 5 }}>
-                            {note.tags.slice(0, 3).map(tag => (
-                              <span key={tag} style={{ fontSize: 10, padding: '2px 7px', borderRadius: 4, background: 'rgba(60,221,199,0.1)', border: '1px solid rgba(60,221,199,0.2)', color: S.cyan, fontFamily: 'monospace' }}>
-                                {tag}
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-                    </ListItem>
-                  ))}
-                </ul>
-              )}
-            </SectionCard>
+          {/* section cards */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
 
-            <SectionCard title="Recent Snippets" onViewAll={() => navigate('/snippets')} accentColor={S.purple}>
-              {!stats?.recentSnippets?.length ? (
-                <EmptyState text="No snippets yet." />
-              ) : (
-                <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {stats.recentSnippets.map((snippet) => (
-                    <ListItem key={snippet.id} onClick={() => navigate('/snippets')}>
-                      <Code2 style={{ width: 15, height: 15, color: S.purple, flexShrink: 0, marginTop: 2 }} />
+            {/* notes */}
+            <SectionCard title="Recent Notes" onViewAll={() => navigate('/notes')}>
+              {!stats?.recentNotes?.length ? <Empty text="No notes yet." /> : (
+                <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {stats.recentNotes.map(n => (
+                    <ListItem key={n.id} onClick={() => navigate('/notes')}>
+                      <FileText style={{ width: 14, height: 14, color: '#f87171', flexShrink: 0, marginTop: 2 }} />
                       <div style={{ minWidth: 0, flex: 1 }}>
-                        <p style={{ color: S.text, fontSize: 13, fontWeight: 500, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          {snippet.title}
+                        <p style={{
+                          color: S.text, fontSize: 12, fontWeight: 500,
+                          margin: '0 0 4px', overflow: 'hidden',
+                          textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                        }}>
+                          {n.title}
                         </p>
-                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 5 }}>
-                          <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 4, background: 'rgba(221,183,255,0.12)', border: '1px solid rgba(221,183,255,0.25)', color: S.purple, fontFamily: 'monospace' }}>
-                            {snippet.language}
-                          </span>
-                          {snippet.tags?.slice(0, 2).map(tag => (
-                            <span key={tag} style={{ fontSize: 10, padding: '2px 7px', borderRadius: 4, background: 'rgba(221,183,255,0.08)', border: '1px solid rgba(221,183,255,0.15)', color: S.purple, fontFamily: 'monospace' }}>
-                              {tag}
-                            </span>
-                          ))}
+                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                          {n.tags?.slice(0, 3).map(t => <Tag key={t} color="#f87171">{t}</Tag>)}
                         </div>
                       </div>
                     </ListItem>
@@ -284,29 +199,52 @@ export default function DashboardPage() {
               )}
             </SectionCard>
 
-            <SectionCard title="Open Bugs" onViewAll={() => navigate('/bugs')} accentColor={S.coral}>
-              {!stats?.recentBugs?.length ? (
-                <EmptyState text="No open bugs. Nice work!" />
-              ) : (
-                <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  {stats.recentBugs.map((bug) => {
-                    const sev = SEV[bug.severity] || SEV.medium;
+            {/* snippets */}
+            <SectionCard title="Recent Snippets" onViewAll={() => navigate('/snippets')}>
+              {!stats?.recentSnippets?.length ? <Empty text="No snippets yet." /> : (
+                <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {stats.recentSnippets.map(s => (
+                    <ListItem key={s.id} onClick={() => navigate('/snippets')}>
+                      <Code2 style={{ width: 14, height: 14, color: '#fb923c', flexShrink: 0, marginTop: 2 }} />
+                      <div style={{ minWidth: 0, flex: 1 }}>
+                        <p style={{
+                          color: S.text, fontSize: 12, fontWeight: 500,
+                          margin: '0 0 4px', overflow: 'hidden',
+                          textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                        }}>
+                          {s.title}
+                        </p>
+                        <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                          <Tag color="#fb923c">{s.language}</Tag>
+                          {s.tags?.slice(0, 2).map(t => <Tag key={t} color="#fb923c">{t}</Tag>)}
+                        </div>
+                      </div>
+                    </ListItem>
+                  ))}
+                </ul>
+              )}
+            </SectionCard>
+
+            {/* bugs */}
+            <SectionCard title="Open Bugs" onViewAll={() => navigate('/bugs')}>
+              {!stats?.recentBugs?.length ? <Empty text="No open bugs. Nice work!" /> : (
+                <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  {stats.recentBugs.map(b => {
+                    const c = SEV_COLOR[b.severity] || '#fbbf24';
                     return (
-                      <ListItem key={bug.id} onClick={() => navigate('/bugs')}>
-                        <Bug style={{ width: 15, height: 15, color: S.coral, flexShrink: 0, marginTop: 2 }} />
+                      <ListItem key={b.id} onClick={() => navigate('/bugs')}>
+                        <Bug style={{ width: 14, height: 14, color: '#fbbf24', flexShrink: 0, marginTop: 2 }} />
                         <div style={{ minWidth: 0, flex: 1 }}>
-                          <p style={{ color: S.text, fontSize: 13, fontWeight: 500, margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {bug.title}
+                          <p style={{
+                            color: S.text, fontSize: 12, fontWeight: 500,
+                            margin: '0 0 4px', overflow: 'hidden',
+                            textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                          }}>
+                            {b.title}
                           </p>
-                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginTop: 5 }}>
-                            <span style={{ fontSize: 10, padding: '2px 7px', borderRadius: 4, background: sev.bg, border: `1px solid ${sev.border}`, color: sev.color, fontFamily: 'monospace', textTransform: 'uppercase' }}>
-                              {bug.severity}
-                            </span>
-                            {bug.tags?.slice(0, 2).map(tag => (
-                              <span key={tag} style={{ fontSize: 10, padding: '2px 7px', borderRadius: 4, background: 'rgba(255,180,171,0.08)', border: '1px solid rgba(255,180,171,0.2)', color: S.coral, fontFamily: 'monospace' }}>
-                                {tag}
-                              </span>
-                            ))}
+                          <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                            <Tag color={c}>{b.severity}</Tag>
+                            {b.tags?.slice(0, 2).map(t => <Tag key={t} color={c}>{t}</Tag>)}
                           </div>
                         </div>
                       </ListItem>
@@ -315,6 +253,7 @@ export default function DashboardPage() {
                 </ul>
               )}
             </SectionCard>
+
           </div>
         </>
       )}
