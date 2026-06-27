@@ -15,16 +15,22 @@ const app = express();
 app.use(express.json());
 const allowed = process.env.CORS_ORIGIN.split(",");
 
+console.log("CORS_ORIGIN:", process.env.CORS_ORIGIN);
+console.log("Allowed:", allowed);
+
 app.use(cors({
     origin(origin, callback) {
+        console.log("Incoming Origin:", origin);
+
         if (!origin || allowed.includes(origin)) {
             callback(null, true);
         } else {
+            console.log("Blocked:", origin);
             callback(new Error("Not allowed by CORS"));
         }
     },
     credentials: true
-})); 
+}));
 app.use(cookieParser());
 app.use("/api/auth", authRoutes);
 app.use("/api/dashboard", dashboardRoutes);
